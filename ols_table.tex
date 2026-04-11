@@ -1,0 +1,34 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={OLS Regressions: Beer Tax and Traffic Fatalities (50 States, 2008)},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Heteroskedasticity-robust standard errors (HC1) in parentheses.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-5}{solid, black, 0.05em},
+hline{14}={1-5}{solid, black, 0.05em},
+hline{1}={1-5}{solid, black, 0.08em},
+hline{17}={1-5}{solid, black, 0.08em},
+column{2-5}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) & (2) & (3) & (4) \\
+Beer Tax (\textbackslash{}\$/gallon) & \num{0.833} & \num{-0.462} & \num{-0.744} & \num{-0.628} \\
+& (\num{1.281}) & (\num{0.932}) & (\num{0.960}) & (\num{0.962}) \\
+\textbackslash{}\% Highly Religious &  & \num{0.111}*** & \num{0.097}*** & \num{0.095}** \\
+&  & (\num{0.019}) & (\num{0.019}) & (\num{0.036}) \\
+Population Density &  &  & \num{-0.002}*** & \num{-0.002} \\
+&  &  & (\num{0.001}) & (\num{0.002}) \\
+Unemployment Rate &  &  &  & \num{-0.137} \\
+&  &  &  & (\num{0.252}) \\
+Log Per Capita Income &  &  &  & \num{-0.354} \\
+&  &  &  & (\num{3.968}) \\
+Constant & \num{4.226}*** & \num{-1.467} & \num{-0.150} & \num{4.361} \\
+& (\num{0.519}) & (\num{1.028}) & (\num{1.204}) & (\num{43.148}) \\
+Observations & \num{50} & \num{50} & \num{50} & \num{50} \\
+\$R\textasciicircum{}2\$ & \num{0.009} & \num{0.287} & \num{0.361} & \num{0.366} \\
+Adj. \$R\textasciicircum{}2\$ & \num{-0.012} & \num{0.257} & \num{0.319} & \num{0.294} \\
+\end{talltblr}
+\end{table}
