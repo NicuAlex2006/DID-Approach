@@ -3,7 +3,7 @@
 \begin{talltblr}[         %% tabularray outer open
 caption={Difference-in-Differences: Maryland's 2011 Tax Increase and Traffic Fatalities},
 note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
-note{ }={Standard errors clustered at the state level in parentheses.},
+note{ }={Heteroskedasticity-robust standard errors (HC1) in parentheses.},
 ]                     %% tabularray outer close
 {                     %% tabularray inner open
 colspec={Q[]Q[]Q[]Q[]},
@@ -15,16 +15,16 @@ column{2-4}={}{halign=c},
 column{1}={}{halign=l},
 }                     %% tabularray inner close
 & Basic DiD & DiD + FE & DiD + FE + Controls \\
-Treated \$\textbackslash{}times\$ Post (DiD) & \num{0.581}*** & \num{0.581}*** & \num{0.484}*** \\
-& (\num{0.000}) & (\num{0.000}) & (\num{0.000}) \\
+Treated \$\textbackslash{}times\$ Post (DiD) & \num{0.581}** & \num{0.581}*** & \num{0.484}** \\
+& (\num{0.226}) & (\num{0.162}) & (\num{0.146}) \\
 Treated (Maryland) & \num{-0.600}*** &  &  \\
-& (\num{0.000}) &  &  \\
+& (\num{0.210}) &  &  \\
 Post-2011 & \num{-1.098}*** &  &  \\
-& (\num{0.000}) &  &  \\
-Unemployment Rate &  &  & \num{0.518}*** \\
-&  &  & (\num{0.000}) \\
-Log Per Capita Income &  &  & \num{6.934}*** \\
-&  &  & (\num{0.000}) \\
+& (\num{0.178}) &  &  \\
+Unemployment Rate &  &  & \num{0.518}** \\
+&  &  & (\num{0.218}) \\
+Log Per Capita Income &  &  & \num{6.934} \\
+&  &  & (\num{7.979}) \\
 Observations & \num{24} & \num{24} & \num{24} \\
 \$R\textasciicircum{}2\$ & \num{0.766} & \num{0.939} & \num{0.964} \\
 Adj. \$R\textasciicircum{}2\$ & \num{0.731} & \num{0.861} & \num{0.897} \\

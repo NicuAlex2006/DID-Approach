@@ -196,19 +196,19 @@ ggsave("plot_actual_vs_predicted.pdf", combined_avp, width = 12, height = 10)
 did1 <- feols(
   fatality_rate ~ did + treated + post,
   data = dat_panel,
-  vcov = ~state
+  vcov = "HC1"
 )
 
 did2 <- feols(
   fatality_rate ~ did | state + year,
   data = dat_panel,
-  vcov = ~state
+  vcov = "HC1"
 )
 
 did3 <- feols(
   fatality_rate ~ did + unemployment + log_income | state + year,
   data = dat_panel,
-  vcov = ~state
+  vcov = "HC1"
 )
 
 modelsummary(
@@ -233,6 +233,6 @@ modelsummary(
   ),
   stars  = c("*" = .1, "**" = .05, "***" = .01),
   title  = "Difference-in-Differences: Maryland's 2011 Tax Increase and Traffic Fatalities",
-  notes  = "Standard errors clustered at the state level in parentheses.",
+  notes  = "Heteroskedasticity-robust standard errors (HC1) in parentheses.",
   output = "did_table.tex"
 )
