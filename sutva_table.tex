@@ -1,0 +1,29 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={SUTVA and Spillover Robustness Checks},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Column 1 drops the two most trade-exposed control countries (Luxembourg, Germany). Column 2 tests whether trade exposure predicts unemployment changes within the control group. Column 3 uses continuous debt/GDP as treatment intensity. All specifications include country and year-month FE with clustered SEs.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]},
+hline{2}={1-4}{solid, black, 0.05em},
+hline{8}={1-4}{solid, black, 0.05em},
+hline{1}={1-4}{solid, black, 0.08em},
+hline{12}={1-4}{solid, black, 0.08em},
+column{2-4}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& Drop LU \textbackslash{}\& DE & Exposure \$\textbackslash{}times\$ Post & Continuous Intensity \\
+High-debt \$\textbackslash{}times\$ Post & \num{-0.769} &  &  \\
+& (\num{0.636}) &  &  \\
+Post \$\textbackslash{}times\$ Export Share &  & \num{-0.426} &  \\
+&  & (\num{0.812}) &  \\
+Debt/GDP (2021) \$\textbackslash{}times\$ Post &  &  & \num{-1.343}* \\
+&  &  & (\num{0.715}) \\
+Observations & \num{756} & \num{504} & \num{924} \\
+\$R\textasciicircum{}2\$ & \num{0.952} & \num{0.902} & \num{0.954} \\
+Country FE & X & X & X \\
+Year-Month FE & X & X & X \\
+\end{talltblr}
+\end{table}

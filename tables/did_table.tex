@@ -1,8 +1,10 @@
 \begin{table}
 \centering
+\small
 \begin{talltblr}[         %% tabularray outer open
 caption={Difference-in-Differences: ECB Rate Hikes and Unemployment},
-note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+label={tab:did},
+note{}={* p < 0.1, ** p < 0.05, *** p < 0.01},
 note{ }={Standard errors clustered at the country level. Treatment = high-debt EZ (IT, GR, ES, PT, FR, BE). Control = low-debt EZ (DE, NL, AT, FI, IE, LU). Post = July 2022 onward.},
 ]                     %% tabularray outer close
 {                     %% tabularray inner open
@@ -15,19 +17,19 @@ column{2-5}={}{halign=c},
 column{1}={}{halign=l},
 }                     %% tabularray inner close
 & Basic DiD & DiD + FE & DiD + FE + Controls & DiD + FE + ECB rate \\
-High-debt \$\textbackslash{}times\$ Post (DiD) & \num{-0.910} & \num{-0.910} & \num{-0.758} & \num{-0.887} \\
-& (\num{0.551}) & (\num{0.577}) & (\num{0.540}) & (\num{0.560}) \\
-High-debt & \num{3.749}** &  &  &  \\
-& (\num{1.566}) &  &  &  \\
-Post-July 2022 & \num{-0.393} &  &  &  \\
-& (\num{0.229}) &  &  &  \\
-Log GDP per capita &  &  & \num{-2.897} & \num{-2.174} \\
-&  &  & (\num{2.148}) & (\num{2.138}) \\
-Population Density &  &  & \num{0.027} &  \\
-&  &  & (\num{0.033}) &  \\
-Observations & \num{924} & \num{924} & \num{924} & \num{924} \\
-\$R\textasciicircum{}2\$ & \num{0.381} & \num{0.954} & \num{0.955} & \num{0.954} \\
-Adj.\textbackslash{} \$R\textasciicircum{}2\$ & \num{0.379} & \num{0.949} & \num{0.950} & \num{0.949} \\
+High-debt \$\textbackslash{}times\$ Post (DiD) & -0.910 & -0.910 & -0.758 & -0.887 \\
+& (0.551) & (0.577) & (0.540) & (0.560) \\
+High-debt & 3.749** &  &  &  \\
+& (1.566) &  &  &  \\
+Post-July 2022 & -0.393 &  &  &  \\
+& (0.229) &  &  &  \\
+Log GDP per capita &  &  & -2.897 & -2.174 \\
+&  &  & (2.148) & (2.138) \\
+Population Density &  &  & 0.027 &  \\
+&  &  & (0.033) &  \\
+Observations & 924 & 924 & 924 & 924 \\
+\$R\textasciicircum{}2\$ & 0.381 & 0.954 & 0.955 & 0.954 \\
+Adj.\textbackslash{} \$R\textasciicircum{}2\$ & 0.379 & 0.949 & 0.950 & 0.949 \\
 Country FE &  & X & X & X \\
 Year-Month FE &  & X & X & X \\
 \end{talltblr}

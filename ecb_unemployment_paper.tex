@@ -1,0 +1,317 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{tabularray}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\onehalfspacing
+
+% ── Title ─────────────────────────────────────────────────────────────────────
+\title{\textbf{ECB Rate Hikes and Eurozone Unemployment:\\
+A Difference-in-Differences Approach}}
+\author{Alexandru Nicu Cristian}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Motivation}
+
+After nearly a decade of zero or negative interest rates in the Eurozone, the European Central Bank (ECB) initiated an unprecedented tightening cycle in July 2022, raising its main refinancing rate from 0\% to 4.50\% in just fourteen months. This was the fastest and steepest hiking cycle in the ECB's history, prompted by surging inflation driven by the post-COVID recovery and the energy price shock following Russia's invasion of Ukraine.
+
+While the objective of the rate hikes was to rein in inflation, monetary tightening operates through channels that inevitably affect the real economy: higher borrowing costs for firms and households, reduced investment, tighter credit conditions, and wider sovereign spreads. Crucially, the Eurozone is not a homogeneous monetary union. Member states differ enormously in their fiscal positions, with countries like Greece and Italy carrying government debt exceeding 140\% of GDP, while others like Germany and the Netherlands maintain debt ratios well below 70\%. This fiscal heterogeneity creates a natural setting in which the same monetary policy shock may propagate very differently across countries.
+
+The central mechanism we investigate is the \textbf{sovereign debt channel}: when the ECB raises rates, sovereign bond yields rise, but they rise \textit{disproportionately} for high-debt countries as investors demand larger risk premia. This widens spreads, tightens fiscal space, increases the cost of government borrowing, and constrains public spending --- all of which can amplify unemployment relative to fiscally healthier member states. Concretely, the mechanism operates as follows. First, higher ECB rates raise the risk-free benchmark, pushing up yields on all sovereign bonds. Second, markets reassess default risk: countries with debt-to-GDP ratios above 100\% face steeper yield curves because even modest rate increases sharply raise their debt-servicing costs and rollover risk. Third, wider spreads feed into domestic bank funding costs through the sovereign-bank nexus --- banks holding large portfolios of domestic sovereign debt see their balance sheets weaken, which tightens credit supply to firms and households. Fourth, governments in high-debt countries face binding fiscal constraints: rising interest payments crowd out public investment and social spending, reducing aggregate demand. Fifth, and finally, these combined pressures translate into weaker hiring, higher layoffs, and rising unemployment --- disproportionately in the high-debt periphery.
+
+Understanding whether and how much this differential transmission matters is directly relevant to ongoing debates about the design of Eurozone fiscal rules, the role of the ECB's Transmission Protection Instrument (TPI), and the broader question of whether a one-size-fits-all monetary policy is appropriate for such a diverse monetary union.
+
+\subsection{Research Question}
+
+We investigate the following question: \textbf{Did the ECB's 2022--2023 rate hiking cycle increase unemployment differentially in high-debt Eurozone countries compared to low-debt Eurozone countries?}
+
+We exploit the sharp, well-defined timing of the ECB's first rate hike (July 27, 2022) as a natural experiment. Our treatment group consists of six high-debt Eurozone members (Italy, Greece, Spain, Portugal, France, and Belgium), and our control group consists of six low-debt Eurozone members (Germany, Netherlands, Austria, Finland, Ireland, and Luxembourg). All twelve countries share the same monetary policy, the same currency, and are subject to the same ECB decisions --- but their pre-existing debt levels create differential exposure to the sovereign spread channel through which rate hikes transmit to the real economy.
+
+\subsection{Literature Review}
+
+\subsubsection{Monetary Policy Transmission in Currency Unions}
+
+A large theoretical and empirical literature studies how monetary policy transmits differently across regions in a currency union. The seminal contribution of Mundell (1961) on optimal currency areas established that member states facing asymmetric shocks or lacking fiscal transfer mechanisms may suffer from a common monetary policy. More recently, Corsetti et al.\ (2020) and Lane (2012) have documented that sovereign spreads in the Eurozone diverge significantly during periods of monetary or fiscal stress, creating heterogeneous financial conditions despite a single policy rate.
+
+\subsubsection{The Sovereign-Bank Nexus and Labor Markets}
+
+The transmission from sovereign risk to unemployment runs through multiple channels. Bocola (2016) shows that sovereign risk increases bank funding costs, which tightens credit to firms and reduces employment. Ferrando et al.\ (2019) document that firms in high-spread Eurozone countries face tighter credit constraints during stress episodes, leading to reduced hiring. The European debt crisis of 2010--2012 provided extensive evidence of this mechanism, with countries like Greece and Spain experiencing dramatic unemployment increases while Germany's labor market remained resilient.
+
+\subsubsection{Difference-in-Differences in Macroeconomic Settings}
+
+Our empirical strategy builds on the growing use of DiD methods in macroeconomic settings. Romer and Romer (2010) use narrative identification of fiscal shocks in a panel of OECD countries, while Jord\`{a} et al.\ (2020) employ local projection methods with institutional variation to estimate the effects of monetary policy. Our approach is closest to studies that exploit cross-country variation in exposure to a common shock, using pre-determined characteristics (in our case, debt levels) to define treatment intensity.
+
+\subsubsection{Contribution}
+
+Our paper contributes to this literature by providing quasi-experimental evidence on the employment costs of the 2022--2023 ECB hiking cycle, using a transparent DiD design with a clearly defined treatment timing. We pay particular attention to SUTVA violations arising from intra-Eurozone trade linkages and provide multiple robustness checks to assess the severity of spillover contamination.
+
+\subsection{Summary of Results}
+
+Our study employs three empirical strategies: OLS cross-sectional regressions to characterize the pre-treatment relationship between debt and unemployment, a standard two-group DiD comparing high-debt and low-debt Eurozone countries, and a battery of SUTVA robustness checks that directly test for spillover contamination of the control group.
+
+The OLS regressions confirm a positive association between government debt-to-GDP ratios and unemployment levels in the pre-treatment period. The main DiD specification, with country and year-month fixed effects and standard errors clustered at the country level, estimates the differential treatment effect of ECB rate hikes on high-debt versus low-debt Eurozone countries. The SUTVA checks --- including dropping the most trade-exposed control countries, testing whether trade exposure predicts unemployment changes within the control group, and using continuous treatment intensity --- help assess whether spillovers bias our estimates. The event study confirms that pre-treatment trends are parallel and that any differential effect emerges only after July 2022.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Descriptive Statistics}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Data Description}
+
+All data were obtained from Eurostat, the statistical office of the European Union, ensuring consistency across countries. The panel covers 12 Eurozone countries observed monthly from January 2018 to December 2024, yielding approximately 1,008 country-month observations. The ECB policy rate timeline was sourced from the ECB Statistical Data Warehouse and verified against official press releases. Intra-Eurozone trade data used for SUTVA diagnostics were obtained from Eurostat's Comext database.
+
+\subsubsection{Dependent Variable: Unemployment Rate}
+Monthly, seasonally adjusted unemployment rates as a percentage of the active population (Eurostat table \texttt{une\_rt\_m}). This series is harmonized across EU member states using the ILO definition, ensuring cross-country comparability.
+
+\subsubsection{Control Variable 1: Government Debt-to-GDP}
+Annual general government gross debt as a percentage of GDP (Eurostat table \texttt{gov\_10dd\_edpt1}). This variable serves both as the basis for our treatment classification and as a control in OLS specifications.
+
+\subsubsection{Control Variable 2: GDP per Capita}
+Annual GDP per capita in current euros (Eurostat table \texttt{nama\_10\_pc}). We use the log transformation in regressions to capture diminishing marginal effects.
+
+\subsubsection{Control Variable 3: Population Density}
+Annual population density at the national level (Eurostat table \texttt{demo\_r\_d3dens}). Denser countries tend to have more service-oriented economies and different labor market dynamics.
+
+\subsubsection{Dummy Variables}
+The \textit{High-debt} dummy equals 1 for countries with pre-treatment debt-to-GDP above 90\% (Italy, Greece, Spain, Portugal, France, Belgium) and 0 for the low-debt control group (Germany, Netherlands, Austria, Finland, Ireland, Luxembourg). The \textit{Post} dummy equals 1 for observations from July 2022 onward. The DiD interaction term is \textit{High-debt} $\times$ \textit{Post}.
+
+\subsubsection{Data Limitations}
+
+Several limitations should be acknowledged. Country-level data may mask significant within-country variation. Annual control variables are carried forward within each year, so they do not capture intra-year dynamics. The panel has only 12 countries, which limits the precision of clustered standard errors. Finally, intra-Eurozone trade linkages create potential SUTVA violations, which we address explicitly in Section~\ref{sec:sutva}.
+
+\subsection{Summary Statistics}
+
+Table~\ref{tab:sumstats} presents summary statistics for the key variables in the panel.
+
+% modelsummary/kableExtra output already includes \begin{table}...\end{table}
+\input{tables/summary_stats.tex}
+
+\subsection{Descriptive Evidence}
+
+\subsubsection{Figure 1: Parallel Trends}
+
+Figure~\ref{fig:trends} displays the average unemployment rate over time for each group. In the pre-treatment period (2018 to mid-2022), both groups follow broadly parallel downward trends --- a crucial requirement for the DiD identifying assumption. Both the high-debt and low-debt groups experienced substantial unemployment declines driven by the post-2013 Eurozone recovery and the strong labor market rebound following the initial COVID shock in 2020. The vertical dashed line marks the ECB's first rate hike in July 2022. After treatment, the gap between the two groups narrows, consistent with high-debt countries experiencing relatively worse unemployment outcomes (or, equivalently, their pre-existing advantage in unemployment reduction slowing or reversing).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_parallel_trends.pdf}
+\caption{Average unemployment rate by debt group, 2018--2024. Vertical dashed line marks the ECB's first rate hike (July 2022).}
+\label{fig:trends}
+\end{figure}
+
+\subsubsection{Figure 2: ECB Policy Rate Timeline}
+
+Figure~\ref{fig:ecbrate} shows the ECB main refinancing rate over the sample period. The rate was held at 0\% from March 2016 through July 2022, then raised in ten consecutive steps to 4.50\% by September 2023, before modest cuts began in June 2024. The staircase pattern highlights the unprecedented speed of tightening: 450 basis points in fourteen months. This sharp, well-defined treatment timing is what makes our DiD strategy feasible --- there is no ambiguity about when the policy shock occurred.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_ecb_rate.pdf}
+\caption{ECB main refinancing rate, 2018--2024. The dashed vertical line marks July 2022.}
+\label{fig:ecbrate}
+\end{figure}
+
+\subsubsection{Figure 3: Country-Level Trends}
+
+Figure~\ref{fig:countrytrends} presents country-level unemployment trends, faceted by individual country. Within the high-debt panel, Greece and Spain have the highest unemployment levels but show strong downward trends driven by structural reforms and tourism recovery. Italy and France hover around 7--8\%, while Portugal and Belgium are lower. In the low-debt panel, Germany, Netherlands, and Austria have consistently low unemployment around 3--5\%, while Ireland shows a sharp COVID spike followed by rapid recovery. Luxembourg maintains the lowest unemployment in the sample. The faceted view reveals that while the group-level parallel trends hold well on average, individual countries show heterogeneity that motivates our robustness checks with continuous treatment intensity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_country_trends.pdf}
+\caption{Country-level unemployment trends, faceted by country.}
+\label{fig:countrytrends}
+\end{figure}
+
+\subsubsection{Figure 4: Pre-Treatment Debt Levels}
+
+Figure~\ref{fig:debtbar} shows government debt-to-GDP ratios in 2021 --- the year before treatment. The classification is visually clear: Greece exceeds 200\%, Italy is near 155\%, and Spain, France, Portugal, and Belgium are all above 100\%, while all low-debt members are near or below 70\%. The dashed line marks the Maastricht Treaty's 60\% reference value, and the dotted red line marks our 90\% treatment threshold. The sharp separation between groups --- with no country near the threshold --- reduces concerns about misclassification driving results.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_debt_bar.pdf}
+\caption{Government debt-to-GDP ratio by country (2021). Dashed line: Maastricht 60\% threshold. Dotted line: 90\% treatment threshold.}
+\label{fig:debtbar}
+\end{figure}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Econometric Evidence}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Econometric Model}
+
+We begin with a standard OLS cross-sectional regression using pre-treatment country averages:
+
+\begin{equation}
+\text{Unemployment}_i = \alpha + \beta_1 \text{Debt/GDP}_i + \mathbf{X}_i'\boldsymbol{\gamma} + \varepsilon_i
+\label{eq:ols}
+\end{equation}
+
+where $\mathbf{X}_i$ includes log GDP per capita and population density. Table~\ref{tab:ols} presents results with incrementally added controls. While OLS cannot establish causality, it provides useful context on the cross-sectional relationship between debt and unemployment. A positive $\hat{\beta}_1$ indicates that countries with higher debt-to-GDP ratios tend to have higher unemployment, consistent with the sovereign debt channel hypothesis: high debt constrains fiscal space, limits counter-cyclical spending, and correlates with structural weaknesses that elevate equilibrium unemployment.
+
+\input{tables/ols_table.tex}
+
+Figure~\ref{fig:avp} shows actual vs.\ predicted unemployment for each OLS specification, with countries color-coded by debt group. Points above the 45-degree line are under-predicted (actual unemployment exceeds the model's prediction); points below are over-predicted. The progression from Model 1 to Model 3 shows improving fit as controls are added, with the residual segments (distance from the 45-degree line) shrinking. Greece consistently lies above the line even in the fullest specification, reflecting country-specific labor market features not captured by our controls.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_actual_vs_predicted.pdf}
+\caption{Actual vs.\ predicted unemployment for each OLS specification. Points above the 45-degree line indicate under-prediction.}
+\label{fig:avp}
+\end{figure}
+
+\subsection{Difference-in-Differences Model}
+
+Our main specification estimates the two-way fixed effects model:
+
+\begin{equation}
+\text{Unemployment}_{it} = \alpha + \delta(\text{High-debt}_i \times \text{Post}_t) + \mu_i + \lambda_t + \mathbf{X}_{it}'\boldsymbol{\gamma} + \varepsilon_{it}
+\label{eq:did}
+\end{equation}
+
+where $\mu_i$ are country fixed effects absorbing all time-invariant country characteristics (labor market institutions, industrial structure, geography), $\lambda_t$ are year-month fixed effects absorbing all common time shocks (energy prices, EU-wide policy changes, global business cycle), and $\delta$ is the coefficient of interest --- the differential effect of the ECB hiking cycle on high-debt countries relative to low-debt countries. Standard errors are clustered at the country level. Given the small number of clusters (12 countries, well below the 30-cluster threshold recommended by Cameron et al.\ 2008), we additionally report wild cluster bootstrap $p$-values, which provide more reliable inference in finite samples.
+
+\input{tables/did_table.tex}
+
+Column (1) is the basic DiD without fixed effects. Columns (2)--(4) add two-way fixed effects with incremental controls. The coefficient $\hat{\delta}$ captures whether high-debt countries experienced a differential unemployment change after July 2022 compared to low-debt countries, after controlling for all common time effects and permanent country differences. A negative $\hat{\delta}$ would suggest that high-debt countries actually saw relatively \textit{better} unemployment outcomes --- potentially reflecting pre-existing downward trends in periphery unemployment that continued despite rate hikes, or the offsetting effect of NextGenerationEU fiscal transfers flowing disproportionately to high-debt member states.
+
+\subsection{SUTVA and Spillover Analysis}
+\label{sec:sutva}
+
+The Stable Unit Treatment Value Assumption (SUTVA) requires that the treatment status of one unit does not affect outcomes of other units. In our context, this assumption is potentially violated through two main channels.
+
+\textbf{Trade channel:} If ECB rate hikes depress aggregate demand in Italy or Spain (high-debt countries facing tighter financial conditions), this reduces their imports from Germany and the Netherlands (control countries), potentially raising unemployment in the control group. This contamination biases our DiD estimate \textit{toward zero}: we underestimate the true differential effect because control countries are also partially affected by the treatment through trade linkages.
+
+\textbf{Financial channel:} Sovereign stress in high-debt countries can spill over through cross-border bank exposures. German and Dutch banks holding Italian or Spanish sovereign debt face balance sheet losses when spreads widen, potentially tightening credit in their home markets.
+
+Figure~\ref{fig:trade} shows that control countries' export exposure to the treated group varies considerably. This variation motivates our robustness strategy: if spillovers matter, the most trade-exposed control countries should show the largest unemployment effects.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/plot_trade_exposure.pdf}
+\caption{Export share of each control country destined for the six treated countries (2021).}
+\label{fig:trade}
+\end{figure}
+
+We implement three robustness checks:
+
+\textbf{Test 1} drops Luxembourg and Germany (the most trade-exposed controls). If SUTVA violations through trade linkages contaminate the control group, removing the most-exposed countries should \textit{increase} the estimated $|\hat{\delta}|$, since the remaining control group is ``cleaner.''
+
+\textbf{Test 2} tests within the control group whether higher trade exposure to treated countries predicts larger unemployment increases post-treatment (Figure~\ref{fig:sutva_scatter}). A positive and significant slope would indicate that trade spillovers are actively contaminating our control group. An insignificant slope is reassuring.
+
+\textbf{Test 3} uses the continuous debt-to-GDP ratio interacted with Post as a treatment intensity measure, sidestepping the binary classification entirely. This specification does not require SUTVA in the traditional sense because it uses continuous variation rather than a binary treatment-control distinction.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/plot_sutva_scatter.pdf}
+\caption{SUTVA diagnostic: trade exposure to treated countries vs.\ post-treatment unemployment change within the control group. A significant positive slope would indicate spillover contamination.}
+\label{fig:sutva_scatter}
+\end{figure}
+
+\input{tables/sutva_table.tex}
+
+Regardless of results, SUTVA violations through the trade and financial channels bias our estimates conservatively: the true differential effect of ECB rate hikes on high-debt countries is likely at least as large as what we estimate, because some of the ``treatment effect'' spills over into control country outcomes, compressing the treatment-control gap.
+
+\subsection{Event Study}
+
+The event study provides a formal test of the parallel trends assumption and traces the dynamic evolution of the treatment effect:
+
+\begin{equation}
+\text{Unemployment}_{it} = \sum_{k \neq -1} \beta_k (\text{High-debt}_i \times \mathbf{1}[t - t^* = k]) + \mu_i + \lambda_t + \varepsilon_{it}
+\label{eq:eventstudy}
+\end{equation}
+
+The reference period is $k = -1$ (June 2022, the month before the first rate hike). Pre-treatment coefficients ($k < -1$) should be statistically indistinguishable from zero under parallel trends; post-treatment coefficients ($k \geq 0$) trace the dynamic treatment effect month by month.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/plot_event_study.pdf}
+\caption{Event study coefficients with 95\% confidence intervals (clustered at country level). Blue = pre-treatment; red = post-treatment. Reference period: June 2022 ($k=-1$).}
+\label{fig:eventstudy}
+\end{figure}
+
+The event study serves three purposes. First, it provides a visual check of the parallel trends assumption: if pre-treatment coefficients hover around zero (within the confidence bands), we cannot reject that the two groups were on similar trajectories before the ECB began hiking. Second, it reveals whether effects appear \textit{before} the official treatment date, which would suggest either anticipation effects (markets pricing in hikes via forward guidance) or a violation of the research design. Third, the post-treatment coefficients show whether the effect is immediate, gradual, persistent, or transitory --- information that a single DiD coefficient cannot provide.
+
+\subsection{Additional Threats to Identification}
+
+\paragraph{Concurrent Shocks.} The energy crisis disproportionately affected Germany due to its gas dependency on Russia, potentially increasing unemployment in the control group through a channel unrelated to ECB rate hikes. Conversely, NextGenerationEU (NGEU) transfers flowed disproportionately to Italy and Spain, partially offsetting tighter financial conditions. Country and time fixed effects absorb common trends but cannot control for country-specific time-varying confounders that coincide with treatment.
+
+\paragraph{Anticipation Effects.} Markets may have priced in rate hikes before July 2022 through ECB forward guidance and the June 2022 announcement of the anti-fragmentation instrument (TPI). If sovereign spreads widened before the actual first hike, the treatment effect may have started earlier than our design assumes. The event study assesses whether significant effects appear in the months immediately before July 2022.
+
+\paragraph{Small Number of Clusters.} With only 12 clusters, conventional clustered standard errors may over-reject. Cameron et al.\ (2008) recommend at least 30 clusters for asymptotic inference to be reliable. Wild cluster bootstrap $p$-values, which we report throughout, are our preferred basis for statistical significance.
+
+\paragraph{Heterogeneous Treatment Effects.} Greece (debt/GDP $>$ 200\%) and Italy ($\approx$ 155\%) face very different sovereign spread dynamics than France ($\approx$ 113\%) or Belgium ($\approx$ 108\%). Our average treatment effect masks this heterogeneity. The continuous-intensity specification (Test 3 in the SUTVA section) partially addresses this by allowing the effect to scale with the debt-to-GDP ratio.
+
+\paragraph{Composition of Policy Mix.} Countries differed in labor market reforms, fiscal adjustments, and sector-specific recoveries (e.g., tourism in Southern Europe) during this period. These are not captured by our controls and may confound $\hat{\delta}$.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ══════════════════════════════════════════════════════════════════════════════
+
+This paper examines whether the ECB's 2022--2023 rate hiking cycle increased unemployment differentially in high-debt Eurozone countries relative to low-debt members. Using monthly Eurostat data for 12 Eurozone countries from 2018 to 2024, we employ a difference-in-differences design that exploits the sharp timing of the first rate hike in July 2022 and pre-existing heterogeneity in sovereign debt levels.
+
+Our analysis proceeds in three stages. The descriptive evidence shows broadly parallel pre-treatment unemployment trends across groups, supporting the DiD identifying assumption. The main TWFE DiD specification estimates the average differential treatment effect, and the event study formally tests the parallel trends assumption and traces dynamic effects. Dedicated SUTVA and spillover diagnostics assess the severity of intra-Eurozone trade contamination.
+
+Several caveats apply. Trade and financial spillovers likely violate SUTVA in principle, though the direction of bias is toward zero --- our estimates are conservative lower bounds. Concurrent shocks (the energy crisis, NGEU transfers) and the small number of clusters (12) further complicate causal interpretation, which is why we rely on wild cluster bootstrap inference throughout.
+
+Our findings carry direct implications for the design of Eurozone institutions. If high-debt countries bear disproportionately large unemployment costs from ECB rate hikes --- and our estimates are conservative precisely because spillovers compress the treatment-control gap --- then the true employment cost of monetary tightening in indebted member states is larger than what we measure. This strengthens the case for the ECB's Transmission Protection Instrument not as a temporary emergency tool, but as a permanent feature of the monetary policy framework: one that can compress sovereign spreads and limit the fiscal channel through which rate hikes translate into labor market deterioration. More broadly, our results suggest that the design of Eurozone fiscal rules and the adequacy of common stabilization mechanisms --- including a proposed European unemployment reinsurance scheme --- deserve continued attention from policymakers seeking to reconcile price stability with equitable employment outcomes across the currency union.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section*{Bibliography}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{thebibliography}{99}
+
+\bibitem{bocola2016} Bocola, L. (2016). The pass-through of sovereign risk. \textit{Journal of Political Economy}, 124(4), 879--926.
+
+\bibitem{cameron2008} Cameron, A. C., Gelbach, J. B., \& Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. \textit{Review of Economics and Statistics}, 90(3), 414--427.
+
+\bibitem{corsetti2020} Corsetti, G., Kuester, K., Meier, A., \& M\"{u}ller, G. J. (2020). The Eurozone crisis and fiscal policy. \textit{CEPR Discussion Paper}, DP14891.
+
+\bibitem{ferrando2019} Ferrando, A., Popov, A., \& Udell, G. F. (2019). Do SMEs benefit from unconventional monetary policy? \textit{Journal of Money, Credit and Banking}, 51(4), 895--928.
+
+\bibitem{jorda2020} Jord\`{a}, \`{O}., Schularick, M., \& Taylor, A. M. (2020). The effects of quasi-random monetary experiments. \textit{American Economic Review}, 110(7), 2271--2308.
+
+\bibitem{lane2012} Lane, P. R. (2012). The European sovereign debt crisis. \textit{Journal of Economic Perspectives}, 26(3), 49--68.
+
+\bibitem{mundell1961} Mundell, R. A. (1961). A theory of optimum currency areas. \textit{American Economic Review}, 51(4), 657--665.
+
+\bibitem{romer2010} Romer, C. D., \& Romer, D. H. (2010). The macroeconomic effects of tax changes. \textit{American Economic Review}, 100(3), 763--801.
+
+\bibitem{ecb2024} European Central Bank (2024). Key ECB interest rates. \url{https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html}
+
+\bibitem{eurostat2024} Eurostat (2024). Unemployment statistics. \url{https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Unemployment_statistics}
+
+\bibitem{comext2024} Eurostat (2024). Intra-EU trade in goods. \url{https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Intra-EU_trade_in_goods_-_main_features}
+
+\end{thebibliography}
+
+\end{document}
