@@ -5,8 +5,6 @@
 #           figures/plot_ecb_rate.pdf
 #           figures/plot_country_trends.pdf
 #           figures/plot_debt_bar.pdf
-#           figures/plot_trade_exposure.pdf
-#           figures/plot_sutva_scatter.pdf
 # ══════════════════════════════════════════════════════════════════════════════
 
 rm(list = ls())
@@ -17,7 +15,6 @@ pacman::p_load(tidyverse, kableExtra, ggrepel)
 panel         <- readRDS("data/panel_clean.rds")
 debt          <- readRDS("data/debt_2021.rds")
 ecb_monthly   <- readRDS("data/ecb_rate_monthly.rds")
-trade_exp     <- readRDS("data/trade_exposure.rds")
 
 dir.create("figures", showWarnings = FALSE)
 dir.create("tables",  showWarnings = FALSE)
@@ -25,7 +22,7 @@ dir.create("tables",  showWarnings = FALSE)
 treatment_date <- as.Date("2022-07-01")
 
 country_names <- c(
-  IT="Italy", GR="Greece", ES="Spain", PT="Portugal", FR="France", BE="Belgium",
+  IT="Italy", EL="Greece", ES="Spain", PT="Portugal", FR="France", BE="Belgium",
   DE="Germany", NL="Netherlands", AT="Austria", FI="Finland", IE="Ireland", LU="Luxembourg"
 )
 
@@ -67,9 +64,14 @@ sumstats %>%
       col.names = c("Variable", "N", "Min", "Q1", "Mean", "Median", "Q3", "Max"),
       caption = "Summary Statistics --- 12 Eurozone Countries, 2018--2024 (Monthly) \\label{tab:sumstats}") %>%
   kable_styling(latex_options = c("hold_position")) %>%
-  footnote(general = "Sources: Eurostat une\\_rt\\_m, gov\\_10dd\\_edpt1, nama\\_10\\_pc, demo\\_r\\_d3dens, ECB SDW.",
+  footnote(general = "Sources: Eurostat, ECB Statistical Data Warehouse.",
            general_title = "", threeparttable = TRUE) %>%
   save_kable("tables/summary_stats.tex")
+
+# Post-process: fix any double-escaped characters
+sumstats_txt <- readLines("tables/summary_stats.tex", warn = FALSE)
+sumstats_txt <- gsub("\\\\textbackslash\\{\\}\\\\_", "\\_", paste(sumstats_txt, collapse = "\n"))
+writeLines(sumstats_txt, "tables/summary_stats.tex")
 
 cat("Saved: tables/summary_stats.tex\n")
 
@@ -96,7 +98,7 @@ p1 <- ggplot(trends, aes(x = date, y = avg_unemp,
        caption = "Unweighted group averages. Source: Eurostat une_rt_m.") +
   theme_paper
 
-ggsave("figures/plot_parallel_trends.pdf", p1, width = 9, height = 5, device = cairo_pdf)
+ggsave("figures/plot_parallel_trends.pdf", p1, width = 9, height = 5)
 cat("Saved: figures/plot_parallel_trends.pdf\n")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -114,7 +116,7 @@ p2 <- ggplot(ecb_monthly, aes(x = date, y = rate)) +
        caption = "Source: European Central Bank Statistical Data Warehouse.") +
   theme_paper
 
-ggsave("figures/plot_ecb_rate.pdf", p2, width = 9, height = 4, device = cairo_pdf)
+ggsave("figures/plot_ecb_rate.pdf", p2, width = 9, height = 4)
 cat("Saved: figures/plot_ecb_rate.pdf\n")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -122,7 +124,7 @@ cat("Saved: figures/plot_ecb_rate.pdf\n")
 # ══════════════════════════════════════════════════════════════════════════════
 panel_named <- panel %>%
   mutate(country_name_f = factor(country_name,
-           levels = country_names[c("IT","GR","ES","PT","FR","BE",
+           levels = country_names[c("IT","EL","ES","PT","FR","BE",
                                      "DE","NL","AT","FI","IE","LU")]))
 
 p3 <- ggplot(panel_named, aes(x = date, y = unemp_rate, color = group_label)) +
@@ -138,7 +140,7 @@ p3 <- ggplot(panel_named, aes(x = date, y = unemp_rate, color = group_label)) +
   theme(strip.background = element_rect(fill = "grey92"),
         axis.text.x = element_text(size = 8))
 
-ggsave("figures/plot_country_trends.pdf", p3, width = 12, height = 8, device = cairo_pdf)
+ggsave("figures/plot_country_trends.pdf", p3, width = 12, height = 8)
 cat("Saved: figures/plot_country_trends.pdf\n")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -147,7 +149,7 @@ cat("Saved: figures/plot_country_trends.pdf\n")
 debt_plot <- debt %>%
   mutate(
     country_name = country_names[geo],
-    group_label  = ifelse(geo %in% c("IT","GR","ES","PT","FR","BE"),
+    group_label  = ifelse(geo %in% c("IT","EL","ES","PT","FR","BE"),
                           "Treated (High-Debt)", "Control (Low-Debt)"),
     country_name = fct_reorder(country_name, debt_gdp_2021)
   )
@@ -165,53 +167,7 @@ p4 <- ggplot(debt_plot, aes(x = country_name, y = debt_gdp_2021, fill = group_la
        caption = "Source: Eurostat gov_10dd_edpt1.") +
   theme_paper
 
-ggsave("figures/plot_debt_bar.pdf", p4, width = 8, height = 5, device = cairo_pdf)
+ggsave("figures/plot_debt_bar.pdf", p4, width = 8, height = 5)
 cat("Saved: figures/plot_debt_bar.pdf\n")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 6. Figure 5: SUTVA — Trade exposure bar chart
-# ══════════════════════════════════════════════════════════════════════════════
-trade_named <- trade_exp %>%
-  mutate(country_name = fct_reorder(country_names[country], export_share))
-
-p5 <- ggplot(trade_named, aes(x = country_name, y = export_share * 100)) +
-  geom_col(fill = "#4575B4", width = 0.6) +
-  geom_text(aes(label = paste0(round(export_share * 100, 1), "%")),
-            hjust = -0.2, size = 3.5) +
-  coord_flip(ylim = c(0, 50)) +
-  labs(x = NULL, y = "Export Share to Treated Countries (%)",
-       caption = "Share of goods exports destined for IT, GR, ES, PT, FR, BE (2021).\nSource: Eurostat / Comext.") +
-  theme_paper
-
-ggsave("figures/plot_trade_exposure.pdf", p5, width = 7, height = 4, device = cairo_pdf)
-cat("Saved: figures/plot_trade_exposure.pdf\n")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 7. Figure 6: SUTVA — Trade exposure vs unemployment change (scatter)
-# ══════════════════════════════════════════════════════════════════════════════
-ctrl_change <- panel %>%
-  filter(high_debt == 0) %>%
-  group_by(geo, country_name) %>%
-  summarise(
-    unemp_pre  = mean(unemp_rate[post == 0], na.rm = TRUE),
-    unemp_post = mean(unemp_rate[post == 1], na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  mutate(delta_unemp = unemp_post - unemp_pre) %>%
-  left_join(trade_exp %>% rename(geo = country), by = "geo")
-
-p6 <- ggplot(ctrl_change, aes(x = export_share * 100, y = delta_unemp)) +
-  geom_hline(yintercept = 0, linetype = "dotted", color = "grey60") +
-  geom_smooth(method = "lm", se = TRUE, color = "#2C3E50", fill = "#2C3E50",
-              alpha = 0.15, linewidth = 0.8) +
-  geom_point(color = "#4575B4", size = 3) +
-  geom_text_repel(aes(label = country_name), size = 3.2, max.overlaps = 10) +
-  labs(x = "Export Share to Treated Countries (%)",
-       y = expression(Delta ~ "Unemployment (post minus pre, pp)"),
-       caption = "Control group only (N=6). OLS fit with 95% CI.\nPositive slope would indicate spillover contamination.") +
-  theme_paper
-
-ggsave("figures/plot_sutva_scatter.pdf", p6, width = 7, height = 5, device = cairo_pdf)
-cat("Saved: figures/plot_sutva_scatter.pdf\n")
 
 cat("\nDone: 2_descriptive_evidence.R\n")

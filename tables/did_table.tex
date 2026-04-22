@@ -1,36 +1,27 @@
 \begin{table}
 \centering
-\small
-\begin{talltblr}[         %% tabularray outer open
-caption={Difference-in-Differences: ECB Rate Hikes and Unemployment},
-label={tab:did},
-note{}={* p < 0.1, ** p < 0.05, *** p < 0.01},
-note{ }={Standard errors clustered at the country level. Treatment = high-debt EZ (IT, GR, ES, PT, FR, BE). Control = low-debt EZ (DE, NL, AT, FI, IE, LU). Post = July 2022 onward.},
-]                     %% tabularray outer close
-{                     %% tabularray inner open
-colspec={Q[]Q[]Q[]Q[]Q[]},
-hline{2}={1-5}{solid, black, 0.05em},
-hline{12}={1-5}{solid, black, 0.05em},
-hline{1}={1-5}{solid, black, 0.08em},
-hline{17}={1-5}{solid, black, 0.08em},
-column{2-5}={}{halign=c},
-column{1}={}{halign=l},
-}                     %% tabularray inner close
-& Basic DiD & DiD + FE & DiD + FE + Controls & DiD + FE + ECB rate \\
-High-debt \$\textbackslash{}times\$ Post (DiD) & -0.910 & -0.910 & -0.758 & -0.887 \\
-& (0.551) & (0.577) & (0.540) & (0.560) \\
-High-debt & 3.749** &  &  &  \\
-& (1.566) &  &  &  \\
-Post-July 2022 & -0.393 &  &  &  \\
-& (0.229) &  &  &  \\
-Log GDP per capita &  &  & -2.897 & -2.174 \\
-&  &  & (2.148) & (2.138) \\
-Population Density &  &  & 0.027 &  \\
-&  &  & (0.033) &  \\
-Observations & 924 & 924 & 924 & 924 \\
-\$R\textasciicircum{}2\$ & 0.381 & 0.954 & 0.955 & 0.954 \\
-Adj.\textbackslash{} \$R\textasciicircum{}2\$ & 0.379 & 0.949 & 0.950 & 0.949 \\
-Country FE &  & X & X & X \\
-Year-Month FE &  & X & X & X \\
-\end{talltblr}
+\caption{Difference-in-Differences: ECB Rate Hikes and Unemployment \label{tab:did}}
+\centering
+\begin{tabular}[t]{lcccc}
+\toprule
+  & (1) No FE & (2) TWFE & (3) + Controls & (4) + ECB Rate\\
+\midrule
+(Intercept) & 7.199*** &  &  & \\
+ & (1.070) &  &  & \\
+High-Debt $\times$ Post & 1.071 & -1.708* & -1.151 & -1.151\\
+ & (0.916) & (0.937) & (0.699) & (0.699)\\
+Log GDP per Capita &  &  & -6.144 & -6.144\\
+ &  &  & (4.928) & (4.928)\\
+Population Density &  &  & 0.084 & 0.084\\
+ &  &  & (0.064) & (0.064)\\
+\midrule
+Observations & 1008 & 1008 & 1008 & 1008\\
+$R^2$ & 0.012 & 0.928 & 0.934 & 0.934\\
+Adj. $R^2$ & 0.011 & 0.920 & 0.927 & 0.927\\
+Country FE &  & X & X & X\\
+Year-Month FE &  & X & X & X\\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}Standard errors clustered at the country level in parentheses. Treatment = IT, EL, ES, PT, FR, BE. Control = DE, NL, AT, FI, IE, LU. Post = July 2022 onward.}\\
+\end{tabular}
 \end{table}

@@ -1,6 +1,6 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # 3_reduced_form.R
-# Produces: tables/ols_table.tex, tables/did_table.tex, tables/sutva_table.tex
+# Produces: tables/ols_table.tex, tables/did_table.tex
 #           figures/plot_actual_vs_predicted.pdf
 #           figures/plot_event_study.pdf
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,23 +8,72 @@
 rm(list = ls())
 
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, fixest, modelsummary, kableExtra, ggrepel, fwildclusterboot)
+pacman::p_load(tidyverse, fixest, modelsummary, kableExtra, ggrepel)
+
+# Try to load fwildclusterboot (optional — needed for wild bootstrap p-values)
+has_boot <- require("fwildclusterboot", quietly = TRUE)
+if (!has_boot) {
+  cat("Note: fwildclusterboot not available. Install with install.packages('fwildclusterboot').\n")
+  cat("      Skipping wild cluster bootstrap p-values.\n")
+}
 
 # Force modelsummary to produce standard LaTeX tabular via kableExtra
+# and disable \num{} wrapping (requires siunitx package in LaTeX)
 options(modelsummary_factory_latex = "kableExtra")
+options(modelsummary_format_numeric_latex = "plain")
+
+# Helper: post-process a .tex file to clean up modelsummary escaping issues
+fix_tex <- function(path, label_tag = NULL) {
+  txt <- paste(readLines(path, warn = FALSE), collapse = "\n")
+
+  # 1. Strip \num{...} → just the content inside
+  while (grepl("\\\\num\\{", txt)) {
+    txt <- gsub("\\\\num\\{([^}]*)\\}", "\\1", txt)
+  }
+
+  # 2. Fix \textbackslash{}label\{...\} → \label{...}
+  txt <- gsub("\\\\textbackslash\\{\\}label\\\\\\{([^}]*)\\\\\\}", "\\\\label{\\1}", txt)
+
+  # 3. Fix \$\textbackslash{}times\$ → $\times$
+  txt <- gsub("\\\\\\$\\\\textbackslash\\{\\}times\\\\\\$", "$\\\\times$", txt)
+  # Also handle variant without escaped $
+  txt <- gsub("\\$\\\\textbackslash\\{\\}times\\$", "$\\\\times$", txt)
+
+  # 4. Fix R2 labels
+  txt <- gsub("Num\\.Obs\\.", "Observations", txt)
+  txt <- gsub("R2 Adj\\.", "Adj. $R^2$", txt)
+  txt <- gsub("(^|\n)(R2)( &)", "\\1$R^2$\\3", txt)
+  txt <- gsub("& R2 &", "& $R^2$ &", txt)
+  # Standalone "R2" at start of a line in a table
+  txt <- gsub("\nR2 &", "\n$R^2$ &", txt)
+
+  # 5. Fix FE labels: country\_fe → Country, time\_fe → Year-Month
+  txt <- gsub("FE: country\\\\_fe", "Country FE", txt)
+  txt <- gsub("FE: time\\\\_fe", "Year-Month FE", txt)
+  txt <- gsub("country\\\\_fe", "Country", txt)
+  txt <- gsub("time\\\\_fe", "Year-Month", txt)
+
+  # 6. Inject \label if needed
+  if (!is.null(label_tag) && !grepl("\\\\label\\{", txt)) {
+    txt <- sub("(\\\\caption\\{[^}]*)(\\})",
+               paste0("\\1 \\\\label{", label_tag, "}\\2"), txt)
+  }
+
+  writeLines(txt, path)
+  cat("  Post-processed:", path, "\n")
+}
 
 panel      <- readRDS("data/panel_clean.rds")
-trade_exp  <- readRDS("data/trade_exposure.rds")
 
 dir.create("figures", showWarnings = FALSE)
 dir.create("tables",  showWarnings = FALSE)
 
 treatment_date <- as.Date("2022-07-01")
-treated <- c("IT","GR","ES","PT","FR","BE")
+treated <- c("IT","EL","ES","PT","FR","BE")
 control <- c("DE","NL","AT","FI","IE","LU")
 
 country_names <- c(
-  IT="Italy", GR="Greece", ES="Spain", PT="Portugal", FR="France", BE="Belgium",
+  IT="Italy", EL="Greece", ES="Spain", PT="Portugal", FR="France", BE="Belgium",
   DE="Germany", NL="Netherlands", AT="Austria", FI="Finland", IE="Ireland", LU="Luxembourg"
 )
 
@@ -69,9 +118,10 @@ modelsummary(
     pop_density  = "Population Density",
     "(Intercept)" = "Constant"
   ),
-  title = "OLS Cross-Section: Debt and Pre-Treatment Unemployment \\label{tab:ols}",
+  title = "OLS Cross-Section: Debt and Pre-Treatment Unemployment",
   notes = "Heteroskedasticity-robust SE in parentheses. $N=12$ countries."
 )
+fix_tex("tables/ols_table.tex", label_tag = "tab:ols")
 cat("Saved: tables/ols_table.tex\n")
 
 # Actual vs. predicted plot
@@ -95,7 +145,7 @@ p_avp <- ggplot(pre_long, aes(x = fitted, y = unemp_pre)) +
        caption = "Source: Eurostat.") +
   theme_paper
 
-ggsave("figures/plot_actual_vs_predicted.pdf", p_avp, width = 12, height = 4.5, device = cairo_pdf)
+ggsave("figures/plot_actual_vs_predicted.pdf", p_avp, width = 12, height = 4.5)
 cat("Saved: figures/plot_actual_vs_predicted.pdf\n")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -114,15 +164,26 @@ did4 <- feols(unemp_rate ~ did_term + log_gdppc + pop_density + rate | country_f
               data = panel, cluster = ~geo)
 
 # Wild cluster bootstrap p-values (more reliable with 12 clusters)
-cat("\nRunning wild cluster bootstrap for did2...\n")
-boot2 <- boottest(did2, clustid = "geo", param = "did_term",
-                  B = 9999, type = "rademacher", impose_null = TRUE)
-cat("  Wild bootstrap p-value (did2):", round(boot2$p_val, 4), "\n")
+boot_note <- ""
+if (has_boot) {
+  cat("\nRunning wild cluster bootstrap for did2...\n")
+  boot2 <- boottest(did2, clustid = "geo", param = "did_term",
+                    B = 9999, type = "rademacher", impose_null = TRUE)
+  cat("  Wild bootstrap p-value (did2):", round(boot2$p_val, 4), "\n")
 
-cat("Running wild cluster bootstrap for did3...\n")
-boot3 <- boottest(did3, clustid = "geo", param = "did_term",
-                  B = 9999, type = "rademacher", impose_null = TRUE)
-cat("  Wild bootstrap p-value (did3):", round(boot3$p_val, 4), "\n")
+  cat("Running wild cluster bootstrap for did3...\n")
+  boot3 <- boottest(did3, clustid = "geo", param = "did_term",
+                    B = 9999, type = "rademacher", impose_null = TRUE)
+  cat("  Wild bootstrap p-value (did3):", round(boot3$p_val, 4), "\n")
+
+  boot_note <- paste0(
+    " Wild cluster bootstrap $p$-values (Rademacher, $B=9{,}999$): ",
+    "Col.~(2) $p=", round(boot2$p_val, 3), "$; ",
+    "Col.~(3) $p=", round(boot3$p_val, 3), "$."
+  )
+} else {
+  cat("\nSkipping wild cluster bootstrap (package not installed).\n")
+}
 
 modelsummary(
   list("(1) No FE" = did1, "(2) TWFE" = did2,
@@ -137,68 +198,16 @@ modelsummary(
     pop_density  = "Population Density",
     rate         = "ECB Policy Rate (\\%)"
   ),
-  title = "Difference-in-Differences: ECB Rate Hikes and Unemployment \\label{tab:did}",
+  title = "Difference-in-Differences: ECB Rate Hikes and Unemployment",
   notes = paste0(
-    "Standard errors clustered at the country level in parentheses. ",
-    "Wild cluster bootstrap $p$-values (Rademacher, $B=9{,}999$): ",
-    "Col.~(2) $p=", round(boot2$p_val, 3), "$; ",
-    "Col.~(3) $p=", round(boot3$p_val, 3), "$. ",
-    "Treatment = IT, GR, ES, PT, FR, BE. Control = DE, NL, AT, FI, IE, LU. ",
+    "Standard errors clustered at the country level in parentheses.",
+    boot_note,
+    " Treatment = IT, EL, ES, PT, FR, BE. Control = DE, NL, AT, FI, IE, LU. ",
     "Post = July 2022 onward."
   )
 )
+fix_tex("tables/did_table.tex", label_tag = "tab:did")
 cat("Saved: tables/did_table.tex\n")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 3. SUTVA / Spillover Robustness
-# ══════════════════════════════════════════════════════════════════════════════
-
-# Test 1: Drop Germany and Luxembourg (highest trade exposure)
-panel_drop <- panel %>% filter(!geo %in% c("DE", "LU"))
-did_drop <- feols(unemp_rate ~ did_term + log_gdppc + pop_density | country_fe + time_fe,
-                  data = panel_drop, cluster = ~geo)
-
-# Test 2: Within control group — does trade exposure predict delta unemployment?
-ctrl_data <- panel %>%
-  filter(high_debt == 0) %>%
-  group_by(geo) %>%
-  summarise(
-    delta_unemp = mean(unemp_rate[post == 1], na.rm = TRUE) -
-                  mean(unemp_rate[post == 0], na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  left_join(trade_exp %>% rename(geo = country), by = "geo") %>%
-  mutate(country_name = country_names[geo])
-
-ols_sutva <- lm(delta_unemp ~ export_share, data = ctrl_data)
-
-# Test 3: Continuous treatment intensity (debt/GDP * Post)
-did_cont <- feols(
-  unemp_rate ~ I(debt_gdp_2021/100 * post) + log_gdppc + pop_density | country_fe + time_fe,
-  data = panel, cluster = ~geo
-)
-
-modelsummary(
-  list("(1) Drop DE+LU" = did_drop,
-       "(2) Control OLS" = ols_sutva,
-       "(3) Continuous" = did_cont),
-  output     = "tables/sutva_table.tex",
-  stars      = c("*" = 0.1, "**" = 0.05, "***" = 0.01),
-  gof_map    = c("nobs", "r.squared"),
-  coef_rename = c(
-    did_term                        = "High-Debt $\\times$ Post",
-    export_share                    = "Export Share to Treated",
-    "I(debt_gdp_2021/100 * post)"   = "Debt/GDP $\\times$ Post"
-  ),
-  title = "SUTVA and Spillover Robustness Checks \\label{tab:sutva}",
-  notes = paste0(
-    "Col.~(1): baseline DiD dropping Germany and Luxembourg (most trade-exposed controls). ",
-    "Col.~(2): OLS within the control group --- does export share to treated countries predict ",
-    "$\\Delta$ unemployment? Col.~(3): continuous treatment intensity (debt/GDP $\\times$ Post). ",
-    "All panel specifications include country and year-month FE; SEs clustered at country level."
-  )
-)
-cat("Saved: tables/sutva_table.tex\n")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 4. Event Study / Dynamic DiD
@@ -248,7 +257,7 @@ p_es <- ggplot(es_plot, aes(x = event_time, y = estimate,
   theme_paper +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave("figures/plot_event_study.pdf", p_es, width = 10, height = 5.5, device = cairo_pdf)
+ggsave("figures/plot_event_study.pdf", p_es, width = 10, height = 5.5)
 cat("Saved: figures/plot_event_study.pdf\n")
 
 # ── Pre-trends Wald test ──────────────────────────────────────────────────────

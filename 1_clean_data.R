@@ -16,14 +16,14 @@ pacman::p_load(tidyverse, eurostat, lubridate)
 dir.create("data", showWarnings = FALSE)
 
 # ── Country lists ─────────────────────────────────────────────────────────────
-treated <- c("IT", "GR", "ES", "PT", "FR", "BE")   # high-debt
+treated <- c("IT", "EL", "ES", "PT", "FR", "BE")   # high-debt (Eurostat uses "EL" for Greece)
 control <- c("DE", "NL", "AT", "FI", "IE", "LU")   # low-debt
 countries <- c(treated, control)
 
 treatment_date <- as.Date("2022-07-01")
 
 country_names <- c(
-  IT = "Italy",    GR = "Greece",      ES = "Spain",
+  IT = "Italy",    EL = "Greece",      ES = "Spain",
   PT = "Portugal", FR = "France",      BE = "Belgium",
   DE = "Germany",  NL = "Netherlands", AT = "Austria",
   FI = "Finland",  IE = "Ireland",     LU = "Luxembourg"

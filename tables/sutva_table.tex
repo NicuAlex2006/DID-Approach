@@ -1,31 +1,28 @@
 \begin{table}
 \centering
-\small
-\begin{talltblr}[         %% tabularray outer open
-caption={SUTVA and Spillover Robustness Checks},
-label={tab:sutva},
-note{}={* p < 0.1, ** p < 0.05, *** p < 0.01},
-note{ }={Column 1 drops the two most trade-exposed control countries (Luxembourg, Germany). Column 2 tests whether trade exposure predicts unemployment changes within the control group. Column 3 uses continuous debt/GDP as treatment intensity. All specifications include country and year-month FE with clustered SEs.},
-]                     %% tabularray outer close
-{                     %% tabularray inner open
-colspec={Q[]Q[]Q[]Q[]},
-hline{2}={1-4}{solid, black, 0.05em},
-hline{8}={1-4}{solid, black, 0.05em},
-hline{1}={1-4}{solid, black, 0.08em},
-hline{12}={1-4}{solid, black, 0.08em},
-column{2-4}={}{halign=c},
-column{1}={}{halign=l},
-}                     %% tabularray inner close
-& Drop LU \textbackslash{}\& DE & Exposure \$\textbackslash{}times\$ Post & Continuous Intensity \\
-High-debt \$\textbackslash{}times\$ Post & -0.769 &  &  \\
-& (0.636) &  &  \\
-Post \$\textbackslash{}times\$ Export Share &  & -0.426 &  \\
-&  & (0.812) &  \\
-Debt/GDP (2021) \$\textbackslash{}times\$ Post &  &  & -1.343* \\
-&  &  & (0.715) \\
-Observations & 756 & 504 & 924 \\
-\$R\textasciicircum{}2\$ & 0.952 & 0.902 & 0.954 \\
-Country FE & X & X & X \\
-Year-Month FE & X & X & X \\
-\end{talltblr}
+\caption{SUTVA and Spillover Robustness Checks \textbackslash{}label\{tab:sutva\}}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+  & (1) Drop DE+LU & (2) Control OLS & (3) Continuous\\
+\midrule
+High-Debt \$\textbackslash{}times\$ Post & \num{-0.964} &  & \\
+ & (\num{0.739}) &  & \\
+log\_gdppc & \num{-6.948} &  & \num{-3.385}\\
+ & (\num{6.417}) &  & (\num{2.543})\\
+pop\_density & \num{0.121} &  & \num{0.007}\\
+ & (\num{0.103}) &  & (\num{0.040})\\
+(Intercept) &  & \num{-0.180} & \\
+ &  & (\num{0.470}) & \\
+Export Share to Treated &  & \num{-0.426} & \\
+ &  & (\num{0.788}) & \\
+Debt/GDP \$\textbackslash{}times\$ Post &  &  & \num{-2.711}**\\
+ &  &  & (\num{0.955})\\
+\midrule
+Num.Obs. & \num{840} & \num{6} & \num{1008}\\
+R2 & \num{0.930} & \num{0.068} & \num{0.945}\\
+\bottomrule
+\multicolumn{4}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\multicolumn{4}{l}{\rule{0pt}{1em}Col.textasciitilde{}(1): baseline DiD dropping Germany and Luxembourg (most trade-exposed controls). Col.textasciitilde{}(2): OLS within the control group --- does export share to treated countries predict $textbackslash{}Delta$ unemployment? Col.textasciitilde{}(3): continuous treatment intensity (debt/GDP $textbackslash{}times$ Post). All panel specifications include country and year-month FE; SEs clustered at country level.}\\
+\end{tabular}
 \end{table}
