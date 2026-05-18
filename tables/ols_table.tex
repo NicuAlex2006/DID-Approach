@@ -1,25 +1,29 @@
 \begin{table}
 \centering
-\caption{OLS Cross-Section: Debt and Pre-Treatment Unemployment \label{tab:ols}}
+\caption{Panel Pooled OLS: Unemployment, Structural Controls, and the Energy Shock \label{tab:ols}}
 \centering
-\begin{tabular}[t]{lccc}
+\begin{tabular}[t]{lccccc}
 \toprule
-  & (1) & (2) & (3)\\
+  & (1) Debt/GDP & (2) + GDP p.c. & (3) + Pop. Density & (4) + Tourism & (5) + Gas $\times$ Post Feb 22\\
 \midrule
-Constant & 1.344 & -11.186 & -8.354\\
- & (1.834) & (44.125) & (44.278)\\
-Debt/GDP (2021, \textbackslash{}\%) & 0.067*** & 0.078* & 0.071\\
- & (0.017) & (0.041) & (0.042)\\
-Log GDP per Capita &  & 1.088 & 0.988\\
- &  & (3.828) & (3.835)\\
-Population Density &  &  & -0.006\\
- &  &  & (0.006)\\
+Constant & 0.822 & 23.436 & 31.025 & 14.661 & 13.111\\
+ & (0.952) & (40.361) & (41.869) & (31.949) & (31.994)\\
+Debt/GDP (2021, \textbackslash{}\%) & 0.068*** & 0.051* & 0.040 & 0.033 & 0.038\\
+ & (0.009) & (0.027) & (0.029) & (0.034) & (0.035)\\
+Log GDP per Capita &  & -1.981 & -2.519 & -1.089 & -0.938\\
+ &  & (3.537) & (3.620) & (2.773) & (2.768)\\
+Population Density (inhab./km\$\textasciicircum{}2\$) &  &  & -0.006 & -0.005 & -0.005\\
+ &  &  & (0.004) & (0.003) & (0.004)\\
+Tourism Share of GVA (\textbackslash{}\%) &  &  &  & 0.646 & 0.551\\
+ &  &  &  & (0.777) & (0.782)\\
+Russian Gas Share $\times$ Post Feb 2022 &  &  &  &  & -0.020\\
+ &  &  &  &  & (0.021)\\
 \midrule
-Observations & 12 & 12 & 12\\
-$R^2$ & 0.605 & 0.609 & 0.651\\
-Adj. $R^2$ & 0.566 & 0.522 & 0.521\\
+Observations & 840 & 840 & 840 & 840 & 840\\
+$R^2$ & 0.571 & 0.584 & 0.615 & 0.635 & 0.645\\
+Adj. $R^2$ & 0.571 & 0.583 & 0.614 & 0.633 & 0.643\\
 \bottomrule
-\multicolumn{4}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
-\multicolumn{4}{l}{\rule{0pt}{1em}Heteroskedasticity-robust SE in parentheses. $N=12$ countries.}\\
+\multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\multicolumn{6}{l}{\rule{0pt}{1em}Standard errors clustered at the country level in parentheses. Sample: 10 Eurozone countries x 84 months (Jan 2018--Dec 2024). Russian gas share = share of Russian natural gas in total national gas consumption in 2021 (Bruegel / IEA), time-invariant. Post Feb 2022 = 1 from Feb 2022 onward (the month of Russia's invasion of Ukraine and the start of the European energy-price shock).}\\
 \end{tabular}
 \end{table}
